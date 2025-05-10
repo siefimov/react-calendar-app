@@ -1,11 +1,12 @@
-import './App.scss'
+import './App.scss';
+// import { NormalCalendar } from './NormalCalendar';
+import { Calendar } from './components/Calendar';
 
-function App() {
+export const App = () => {
   return (
-    <>
-      App
-    </>
-  )
-}
-
-export default App
+    <div style={{ height: '95vh', padding: '1rem' }}>
+      <Calendar />
+      {/* <NormalCalendar /> */}
+    </div>
+  );
+};
