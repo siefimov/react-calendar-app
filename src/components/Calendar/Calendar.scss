@@ -1,0 +1,62 @@
+@use '../../styles/variables' as *;
+
+.rbc-calendar {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  color: $text-color-medium;
+}
+
+.rbc-month-row {
+  & .rbc-event {
+    background-color: $text-color-primary;
+    border-radius: 4px;
+    padding: 7px 0 6px 14px;
+  }
+}
+
+.rbc-day-bg.rbc-today {
+  background-color: $color-background-quaternary;
+}
+
+.rbc-header {
+  background-color: $color-background-quaternary;
+  border: 1px solid $color-background-tertiary;
+  border-bottom: none;
+  color: $text-color-light;
+  font-size: $font-size-small;
+  font-weight: bold;
+  line-height: 45px;
+  text-transform: uppercase;
+}
+
+.rbc-day-slot .rbc-event,
+.rbc-day-slot .rbc-background-event {
+  background-color: $text-color-primary;
+  border: 1px solid $text-color-primary;
+  border-radius: 4px;
+  padding: 7px 0 6px 14px;
+}
+
+.rbc-day-slot {
+  & .rbc-events-container .rbc-event,
+  .rbc-events-container .rbc-background-event {
+    border: 1px solid $text-color-primary;
+  }
+}
+
+.rbc-day-bg.rbc-off-range-bg {
+  background-color: $text-color-white;
+  color: rgba($color: $text-color-dark, $alpha: 0.3);
+}
+
+.rbc-header + .rbc-header {
+  background-color: $color-background-quaternary;
+}
+
+.rbc-now.rbc-today {
+  background-color: $color-background-quaternary;
+}
+
+.rbc-event .rbc-event-label {
+  display: none;
+}
