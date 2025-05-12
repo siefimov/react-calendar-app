@@ -47,6 +47,9 @@ export const Calendar: React.FC = () => {
               ' - ' +
               localizer.format(end, 'MMM D', culture)
             : '',
+        dateFormat: (date: Date,
+          culture?: string,
+          localizer?: DateLocalizer,) => (localizer ? localizer.format(date, 'D', culture) : '')
       },
     }),
     [],
