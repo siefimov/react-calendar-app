@@ -14,26 +14,13 @@ import { CustomTimeGutterHeader } from '../CustomTimeGutterHeader';
 import { CustomDayHeader } from '../CustomDayHeader/CustomDayHeader';
 import { AddEventModal } from '../AddEventModal/AddEventModal';
 import { type CalendarEvent, type EventData } from '../../types';
-import { formatDate, formatTime } from '../../utils/date';
+import { formatDate, formatTime, initialEvents } from '../../utils';
+import withDragAndDrop, {
+  type EventInteractionArgs,
+} from 'react-big-calendar/lib/addons/dragAndDrop';
 
 const localizer = momentLocalizer(moment);
-
-const initialEvents: CalendarEvent[] = [
-  {
-    id: '111',
-    title: 'Tech interview',
-    start: new Date(2025, 4, 15, 10, 0),
-    end: new Date(2025, 4, 15, 12, 0),
-    notes: 'some event',
-  },
-  {
-    id: '222',
-    title: 'Big Day presentation',
-    start: new Date(2025, 4, 20, 9, 0),
-    end: new Date(2025, 4, 20, 10, 0),
-    notes: 'some event',
-  },
-];
+const DragAndDropCalendar = withDragAndDrop<CalendarEvent>(BigCalendar);
 
 export const Calendar: FC = () => {
   const [events, setEvents] = useState<CalendarEvent[]>(initialEvents);
@@ -99,15 +86,17 @@ export const Calendar: FC = () => {
     setEditingEvent(null);
   };
 
-  const handleSelectEvent = (event: CalendarEvent) => {
-    setEditingEvent(event);
+  const handleSelectEvent = (
+    event: object,
+    _e: React.SyntheticEvent<HTMLElement, Event>,
+  ) => {
+    const calendarEvent = event as CalendarEvent;
+    setEditingEvent(calendarEvent);
     setFormData({
-      title: event.title,
-      // date: moment(event.start).format('YYYY-MM-DD'),
-      // time: moment(event.start).format('hh:mm'),
-      date: formatDate(event.start),
-      time: formatTime(event.start),
-      notes: event.notes || '',
+      title: calendarEvent.title,
+      date: formatDate(calendarEvent.start),
+      time: formatTime(calendarEvent.start),
+      notes: calendarEvent.notes || '',
     });
     setIsEditing(false);
     setShowModal(true);
@@ -117,6 +106,36 @@ export const Calendar: FC = () => {
     setEvents(events.filter(e => e.id !== editingEvent?.id));
     setShowModal(false);
     setEditingEvent(null);
+  };
+
+  const handleEventDrop = (args: EventInteractionArgs<CalendarEvent>) => {
+    const { event, start, end } = args;
+    setEvents(prev =>
+      prev.map(e =>
+        e.id === event.id
+          ? {
+              ...e,
+              start: start instanceof Date ? start : new Date(start),
+              end: end instanceof Date ? end : new Date(end),
+            }
+          : e,
+      ),
+    );
+  };
+
+  const handleEventResize = (args: EventInteractionArgs<CalendarEvent>) => {
+    const { event, start, end } = args;
+    setEvents(prev =>
+      prev.map(e =>
+        e.id === event.id
+          ? {
+              ...e,
+              start: start instanceof Date ? start : new Date(start),
+              end: end instanceof Date ? end : new Date(end),
+            }
+          : e,
+      ),
+    );
   };
 
   const { components, formats } = useMemo(
@@ -156,7 +175,7 @@ export const Calendar: FC = () => {
 
   return (
     <div ref={calendarRef} style={{ position: 'relative', height: '90vh' }}>
-      <BigCalendar
+      <DragAndDropCalendar
         defaultView={Views.MONTH}
         localizer={localizer}
         events={events}
@@ -168,8 +187,10 @@ export const Calendar: FC = () => {
         selectable
         onSelectSlot={handleSelectSlot}
         onSelectEvent={handleSelectEvent}
+        onEventDrop={handleEventDrop}
+        onEventResize={handleEventResize}
+        resizable
       />
-
       {showModal && (
         <AddEventModal
           top={modalPosition.top}
