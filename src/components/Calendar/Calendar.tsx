@@ -4,7 +4,6 @@ import {
   DateLocalizer,
   momentLocalizer,
   Views,
-  type Event as CalendarEvent,
   type SlotInfo,
 } from 'react-big-calendar';
 import moment from 'moment';
@@ -13,20 +12,26 @@ import { CustomToolbar } from '../Toolbar';
 import { CustomWeekHeader } from '../CustomWeekHeader';
 import { CustomTimeGutterHeader } from '../CustomTimeGutterHeader';
 import { CustomDayHeader } from '../CustomDayHeader/CustomDayHeader';
-import { AddEventModal, type EventData } from '../AddEventModal/AddEventModal';
+import { AddEventModal } from '../AddEventModal/AddEventModal';
+import { type CalendarEvent, type EventData } from '../../types';
+import { formatDate, formatTime } from '../../utils/date';
 
 const localizer = momentLocalizer(moment);
 
 const initialEvents: CalendarEvent[] = [
   {
+    id: '111',
     title: 'Tech interview',
     start: new Date(2025, 4, 15, 10, 0),
     end: new Date(2025, 4, 15, 12, 0),
+    notes: 'some event',
   },
   {
+    id: '222',
     title: 'Big Day presentation',
     start: new Date(2025, 4, 20, 9, 0),
     end: new Date(2025, 4, 20, 10, 0),
+    notes: 'some event',
   },
 ];
 
@@ -40,6 +45,8 @@ export const Calendar: FC = () => {
     time: '',
     notes: '',
   });
+  const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -56,7 +63,7 @@ export const Calendar: FC = () => {
     setFormData({
       title: '',
       date: '',
-      time: '',      
+      time: '',
       notes: '',
     });
 
@@ -67,16 +74,49 @@ export const Calendar: FC = () => {
     const start = new Date(`${newEvent.date}T${newEvent.time}`);
     const end = moment(start).add(1, 'hour').toDate();
 
-    setEvents(prev => [
-      ...prev,
-      {
-        title: newEvent.title,
-        start,
-        end,
-        allDay: false,
-      },
-    ]);
+    if (editingEvent) {
+      setEvents(prev =>
+        prev.map(e =>
+          e.id === editingEvent.id
+            ? { ...e, title: newEvent.title, start, end, notes: newEvent.notes }
+            : e,
+        ),
+      );
+    } else {
+      setEvents(prev => [
+        ...prev,
+        {
+          id: crypto.randomUUID(),
+          title: newEvent.title,
+          start,
+          end,
+          allDay: false,
+          notes: newEvent.notes,
+        },
+      ]);
+    }
     setShowModal(false);
+    setEditingEvent(null);
+  };
+
+  const handleSelectEvent = (event: CalendarEvent) => {
+    setEditingEvent(event);
+    setFormData({
+      title: event.title,
+      // date: moment(event.start).format('YYYY-MM-DD'),
+      // time: moment(event.start).format('hh:mm'),
+      date: formatDate(event.start),
+      time: formatTime(event.start),
+      notes: event.notes || '',
+    });
+    setIsEditing(false);
+    setShowModal(true);
+  };
+
+  const handleDeleteEvent = () => {
+    setEvents(events.filter(e => e.id !== editingEvent?.id));
+    setShowModal(false);
+    setEditingEvent(null);
   };
 
   const { components, formats } = useMemo(
@@ -127,6 +167,7 @@ export const Calendar: FC = () => {
         max={moment('1970-01-01T23:00:00').toDate()}
         selectable
         onSelectSlot={handleSelectSlot}
+        onSelectEvent={handleSelectEvent}
       />
 
       {showModal && (
@@ -137,6 +178,10 @@ export const Calendar: FC = () => {
           onSave={handleSave}
           formData={formData}
           setFormData={setFormData}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+          editingEvent={editingEvent}
+          onDelete={handleDeleteEvent}
         />
       )}
     </div>

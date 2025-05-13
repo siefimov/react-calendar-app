@@ -1,21 +1,10 @@
 import { useState, type FC } from 'react';
+import moment from 'moment';
+import DatePicker from 'react-datepicker';
+import { type EventData, type EventModalProps } from '../../types';
 import './AddEventModal.scss';
-
-interface EventModalProps {
-  top: number;
-  left: number;
-  onClose: () => void;
-  onSave: (eventData: EventData) => void;
-  formData: EventData;
-  setFormData: React.Dispatch<React.SetStateAction<EventData>>;
-}
-
-export interface EventData {
-  title: string;
-  date: string;
-  time: string;
-  notes: string;
-}
+import 'react-datepicker/dist/react-datepicker.css';
+import { formatDate, formatTime } from '../../utils/date';
 
 export const AddEventModal: FC<EventModalProps> = ({
   top,
@@ -24,6 +13,10 @@ export const AddEventModal: FC<EventModalProps> = ({
   onSave,
   formData,
   setFormData,
+  isEditing,
+  editingEvent,
+  onDelete,
+  setIsEditing,
 }) => {
   const [errors, setErrors] = useState<
     Partial<Record<keyof EventData, string>>
@@ -64,8 +57,28 @@ export const AddEventModal: FC<EventModalProps> = ({
   const handleSubmit = () => {
     if (validate()) {
       onSave(formData);
+      setIsEditing(false);
     }
   };
+
+  const handleEdit = () => setIsEditing(true);
+
+  const selectedDate = formData.date
+    ? moment(formData.date, 'YYYY-MM-DD').toDate()
+    : null;
+
+  const selectedTime =
+    formData.time && formData.date
+      ? moment(
+          `${formData.date}T${formData.time}`,
+          'YYYY-MM-DDTHH:mm',
+        ).isValid()
+        ? moment(
+            `${formData.date}T${formData.time}`,
+            'YYYY-MM-DDTHH:mm',
+          ).toDate()
+        : null
+      : null;
 
   return (
     <div className="event-modal" style={{ top, left }}>
@@ -80,6 +93,7 @@ export const AddEventModal: FC<EventModalProps> = ({
             name="title"
             value={formData.title}
             onChange={handleChange}
+            disabled={!!editingEvent && !isEditing}
           />
           {errors.title && (
             <span className="event-modal__error">{errors.title}</span>
@@ -87,12 +101,17 @@ export const AddEventModal: FC<EventModalProps> = ({
         </label>
         <label>
           Event Date
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            placeholder=""
+          <DatePicker
+            selected={selectedDate}
+            onChange={date => {
+              setFormData(prev => ({
+                ...prev,
+                date: date ? formatDate(date) : '',
+              }));
+            }}
+            dateFormat="yyyy-MM-dd"
+            disabled={!!editingEvent && !isEditing}
+            className="event-modal__datepicker"
           />
           {errors.date && (
             <span className="event-modal__error">{errors.date}</span>
@@ -100,11 +119,22 @@ export const AddEventModal: FC<EventModalProps> = ({
         </label>
         <label>
           Event Time
-          <input
-            type="time"
-            name="time"
-            value={formData.time}
-            onChange={handleChange}
+          <DatePicker
+            selected={selectedTime}
+            onChange={date => {
+              setFormData(prev => ({
+                ...prev,
+                time: date ? formatTime(date) : '',
+              }));
+            }}
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={15}
+            timeCaption="Time"
+            dateFormat="hh:mm aa"
+            timeFormat="hh:mm aa"
+            disabled={!!editingEvent && !isEditing}
+            className="event-modal__datepicker"
           />
           {errors.time && (
             <span className="event-modal__error">{errors.time}</span>
@@ -116,6 +146,7 @@ export const AddEventModal: FC<EventModalProps> = ({
             name="notes"
             value={formData.notes}
             onChange={handleChange}
+            disabled={!!editingEvent && !isEditing}
           />
           {errors.notes && (
             <span className="event-modal__error">{errors.notes}</span>
@@ -123,8 +154,31 @@ export const AddEventModal: FC<EventModalProps> = ({
         </label>
       </div>
       <div className="event-modal__actions">
-        <button onClick={onClose}>Cancel</button>
-        <button onClick={handleSubmit}>Save</button>
+        {editingEvent ? (
+          <>
+            <button onClick={onDelete} className="event-modal__discard">
+              Discard
+            </button>
+            {!isEditing ? (
+              <button onClick={handleEdit} className="event-modal__edit">
+                Edit
+              </button>
+            ) : (
+              <button onClick={handleSubmit} className="event-modal__save">
+                Save
+              </button>
+            )}
+          </>
+        ) : (
+          <>
+            <button onClick={onClose} className="event-modal__cancel">
+              Cancel
+            </button>
+            <button onClick={handleSubmit} className="event-modal__save">
+              Save
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
