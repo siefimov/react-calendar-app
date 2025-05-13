@@ -32,7 +32,7 @@ const initialEvents: CalendarEvent[] = [
 
 export const Calendar: FC = () => {
   const [events, setEvents] = useState<CalendarEvent[]>(initialEvents);
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
   const [formData, setFormData] = useState<EventData>({
     title: '',
