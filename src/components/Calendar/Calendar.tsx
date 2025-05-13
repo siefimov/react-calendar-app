@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo, type FC } from 'react';
 import {
   Calendar as BigCalendar,
   DateLocalizer,
@@ -8,7 +8,10 @@ import {
 } from 'react-big-calendar';
 import moment from 'moment';
 import './Calendar.scss';
-import { CustomToolbar } from '../Toolbar/CustomToolbar';
+import { CustomToolbar } from '../Toolbar';
+import { CustomWeekHeader } from '../CustomWeekHeader';
+import { CustomTimeGutterHeader } from '../CustomTimeGutterHeader';
+import { CustomDayHeader } from '../CustomDayHeader/CustomDayHeader';
 
 const localizer = momentLocalizer(moment);
 
@@ -25,11 +28,18 @@ const events: CalendarEvent[] = [
   },
 ];
 
-export const Calendar: React.FC = () => {
+export const Calendar: FC = () => {
   const { components, formats } = useMemo(
     () => ({
       components: {
         toolbar: CustomToolbar,
+        timeGutterHeader: CustomTimeGutterHeader,
+        week: {
+          header: CustomWeekHeader,
+        },
+        day: {
+          header: CustomDayHeader,
+        },
       },
       formats: {
         dayHeaderFormat: (
@@ -47,9 +57,8 @@ export const Calendar: React.FC = () => {
               ' - ' +
               localizer.format(end, 'MMM D', culture)
             : '',
-        dateFormat: (date: Date,
-          culture?: string,
-          localizer?: DateLocalizer,) => (localizer ? localizer.format(date, 'D', culture) : '')
+        dateFormat: (date: Date, culture?: string, localizer?: DateLocalizer) =>
+          localizer ? localizer.format(date, 'D', culture) : '',
       },
     }),
     [],
@@ -62,6 +71,9 @@ export const Calendar: React.FC = () => {
       events={events}
       formats={formats}
       components={components}
+      step={60}
+      min={moment('1970-01-01T00:00:00').toDate()}
+      max={moment('1970-01-01T23:00:00').toDate()}
     />
   );
 };
