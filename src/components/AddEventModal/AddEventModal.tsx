@@ -1,10 +1,10 @@
 import { useState, type FC } from 'react';
 import moment from 'moment';
-import DatePicker from 'react-datepicker';
 import { type EventData, type EventModalProps } from '../../types';
 import './AddEventModal.scss';
 import 'react-datepicker/dist/react-datepicker.css';
-import { formatDate, formatTime } from '../../utils/date';
+import { EventFormFields } from './components/EventFormFileds';
+import { EventModalActions } from './components/EventModalActions';
 
 export const AddEventModal: FC<EventModalProps> = ({
   top,
@@ -86,100 +86,25 @@ export const AddEventModal: FC<EventModalProps> = ({
         ×
       </button>
       <div className="event-modal__body">
-        <label>
-          Event Name
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            disabled={!!editingEvent && !isEditing}
-          />
-          {errors.title && (
-            <span className="event-modal__error">{errors.title}</span>
-          )}
-        </label>
-        <label>
-          Event Date
-          <DatePicker
-            selected={selectedDate}
-            onChange={date => {
-              setFormData(prev => ({
-                ...prev,
-                date: date ? formatDate(date) : '',
-              }));
-            }}
-            dateFormat="yyyy-MM-dd"
-            disabled={!!editingEvent && !isEditing}
-            className="event-modal__datepicker"
-          />
-          {errors.date && (
-            <span className="event-modal__error">{errors.date}</span>
-          )}
-        </label>
-        <label>
-          Event Time
-          <DatePicker
-            selected={selectedTime}
-            onChange={date => {
-              setFormData(prev => ({
-                ...prev,
-                time: date ? formatTime(date) : '',
-              }));
-            }}
-            showTimeSelect
-            showTimeSelectOnly
-            timeIntervals={15}
-            timeCaption="Time"
-            dateFormat="hh:mm aa"
-            timeFormat="hh:mm aa"
-            disabled={!!editingEvent && !isEditing}
-            className="event-modal__datepicker"
-          />
-          {errors.time && (
-            <span className="event-modal__error">{errors.time}</span>
-          )}
-        </label>
-        <label>
-          Notes
-          <textarea
-            name="notes"
-            value={formData.notes}
-            onChange={handleChange}
-            disabled={!!editingEvent && !isEditing}
-          />
-          {errors.notes && (
-            <span className="event-modal__error">{errors.notes}</span>
-          )}
-        </label>
+        <EventFormFields
+          formData={formData}
+          setFormData={setFormData}
+          errors={errors}
+          editingEvent={editingEvent}
+          isEditing={isEditing}
+          handleChange={handleChange}
+          selectedDate={selectedDate}
+          selectedTime={selectedTime}
+        />
       </div>
-      <div className="event-modal__actions">
-        {editingEvent ? (
-          <>
-            <button onClick={onDelete} className="event-modal__discard">
-              Discard
-            </button>
-            {!isEditing ? (
-              <button onClick={handleEdit} className="event-modal__edit">
-                Edit
-              </button>
-            ) : (
-              <button onClick={handleSubmit} className="event-modal__save">
-                Save
-              </button>
-            )}
-          </>
-        ) : (
-          <>
-            <button onClick={onClose} className="event-modal__cancel">
-              Cancel
-            </button>
-            <button onClick={handleSubmit} className="event-modal__save">
-              Save
-            </button>
-          </>
-        )}
-      </div>
+      <EventModalActions
+        editingEvent={editingEvent}
+        isEditing={isEditing}
+        onDelete={onDelete}
+        handleEdit={handleEdit}
+        handleSubmit={handleSubmit}
+        onClose={onClose}
+      />
     </div>
   );
 };
