@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Calendar, Layout } from './components/';
 import './App.scss';
 
-export const App = () => {
+function App() {
   return (
     <BrowserRouter>
       <Routes>
