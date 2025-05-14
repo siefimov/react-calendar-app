@@ -9,7 +9,7 @@ This project is a Calendar application built with React and TypeScript. The appl
 ## Demo
 
 **Live Preview:**  
-_Coming soon_
+[DEMO](https://siefimov.github.io/react-calendar-app/calendar)
 
 **GitHub repository:**  
 [Link](https://github.com/siefimov/react-calendar-app)
