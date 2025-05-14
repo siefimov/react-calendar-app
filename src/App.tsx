@@ -4,7 +4,7 @@ import "./App.scss";
 
 export const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/react-calendar-app/">
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<div>Coming soon...</div>} />
