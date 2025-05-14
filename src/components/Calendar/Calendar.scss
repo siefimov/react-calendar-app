@@ -3,7 +3,7 @@
 .rbc-calendar {
   font-family: $font-family-base;
   font-size: $font-size-base;
-  color: $text-color-medium;
+  color: $color-text-medium;
 
   & .rbc-time-view {
     border: 1px solid $color-background-tertiary;
@@ -18,7 +18,7 @@
 
 .rbc-month-row {
   & .rbc-event {
-    background-color: $text-color-primary;
+    background-color: $color-primary;
     border-radius: 4px;
     padding: 7px 0 6px 14px;
   }
@@ -32,7 +32,7 @@
   background-color: $color-background-quaternary;
   border: 1px solid $color-background-tertiary;
   border-bottom: none;
-  color: $text-color-light;
+  color: $color-text-light;
   font-size: $font-size-small;
   font-weight: bold;
   line-height: 45px;
@@ -54,8 +54,8 @@
 
 .rbc-day-slot .rbc-event,
 .rbc-day-slot .rbc-background-event {
-  background-color: $text-color-primary;
-  border: 1px solid $text-color-primary;
+  background-color: $color-primary;
+  border: 1px solid $color-primary;
   border-radius: 4px;
   padding: 7px 0 6px 14px;
 }
@@ -63,7 +63,7 @@
 .rbc-day-slot {
   & .rbc-events-container .rbc-event,
   .rbc-events-container .rbc-background-event {
-    border: 1px solid $text-color-primary;
+    border: 1px solid $color-primary;
   }
 
   & .rbc-timeslot-group {
@@ -85,8 +85,8 @@
 }
 
 .rbc-day-bg.rbc-off-range-bg {
-  background-color: $text-color-white;
-  color: rgba($color: $text-color-dark, $alpha: 0.3);
+  background-color: $color-white;
+  color: rgba($color: $color-text-dark, $alpha: 0.3);
 }
 
 .rbc-header + .rbc-header {
@@ -126,17 +126,15 @@
 }
 
 .rbc-row-content .rbc-row {
-  // height: 49px;
   color: black;
 }
 
-// add event modal
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;  
+  bottom: 0;
   display: flex;
   justify-content: center;
   align-items: center;

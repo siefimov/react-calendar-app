@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import './CustomWeekHeader.scss'; // Створіть файл стилів для хедеру
+import './CustomWeekHeader.scss';
 
 interface CustomHeaderProps {
   date: Date;

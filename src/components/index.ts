@@ -3,3 +3,7 @@ export { CustomDayHeader } from './CustomDayHeader';
 export { CustomTimeGutterHeader } from './CustomTimeGutterHeader';
 export { CustomToolbar } from './Toolbar';
 export { CustomWeekHeader } from './CustomWeekHeader';
+export { Calendar } from './Calendar';
+export { Layout } from './Layout';
+export { Sidebar } from './Sidebar';
+export { Header } from './Header';

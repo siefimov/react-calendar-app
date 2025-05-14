@@ -136,8 +136,15 @@ export const Calendar: FC = () => {
 
   const { components, formats } = useMemo(getCalendarConfig, []);
 
-   return (
-    <div ref={calendarRef} style={{ position: 'relative', height: '90vh' }}>
+  return (
+    <div
+      ref={calendarRef}
+      style={{
+        position: 'relative',
+        height: '100vh',
+        padding: '20px',
+      }}
+    >
       <DragAndDropCalendar
         defaultView={Views.MONTH}
         localizer={localizer}
