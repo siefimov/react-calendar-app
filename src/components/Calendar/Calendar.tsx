@@ -1,23 +1,19 @@
 import { useMemo, useRef, useState, type FC } from 'react';
 import {
   Calendar as BigCalendar,
-  DateLocalizer,
   momentLocalizer,
   Views,
   type SlotInfo,
 } from 'react-big-calendar';
 import moment from 'moment';
 import './Calendar.scss';
-import { CustomToolbar } from '../Toolbar';
-import { CustomWeekHeader } from '../CustomWeekHeader';
-import { CustomTimeGutterHeader } from '../CustomTimeGutterHeader';
-import { CustomDayHeader } from '../CustomDayHeader/CustomDayHeader';
 import { AddEventModal } from '../AddEventModal/AddEventModal';
 import { type CalendarEvent, type EventData } from '../../types';
 import { formatDate, formatTime, initialEvents } from '../../utils';
 import withDragAndDrop, {
   type EventInteractionArgs,
 } from 'react-big-calendar/lib/addons/dragAndDrop';
+import { getCalendarConfig } from '../../utils/getCalendarConfig';
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop<CalendarEvent>(BigCalendar);
@@ -138,42 +134,9 @@ export const Calendar: FC = () => {
     );
   };
 
-  const { components, formats } = useMemo(
-    () => ({
-      components: {
-        toolbar: CustomToolbar,
-        timeGutterHeader: CustomTimeGutterHeader,
-        week: {
-          header: CustomWeekHeader,
-        },
-        day: {
-          header: CustomDayHeader,
-        },
-      },
-      formats: {
-        dayHeaderFormat: (
-          date: Date,
-          culture?: string,
-          localizer?: DateLocalizer,
-        ) => (localizer ? localizer.format(date, 'dddd MMM D', culture) : ''),
-        dayRangeHeaderFormat: (
-          { start, end }: { start: Date; end: Date },
-          culture?: string,
-          localizer?: DateLocalizer,
-        ) =>
-          localizer
-            ? localizer.format(start, 'MMM D', culture) +
-              ' - ' +
-              localizer.format(end, 'MMM D', culture)
-            : '',
-        dateFormat: (date: Date, culture?: string, localizer?: DateLocalizer) =>
-          localizer ? localizer.format(date, 'D', culture) : '',
-      },
-    }),
-    [],
-  );
+  const { components, formats } = useMemo(getCalendarConfig, []);
 
-  return (
+   return (
     <div ref={calendarRef} style={{ position: 'relative', height: '90vh' }}>
       <DragAndDropCalendar
         defaultView={Views.MONTH}
