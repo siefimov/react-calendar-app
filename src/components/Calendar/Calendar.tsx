@@ -38,13 +38,30 @@ export const Calendar: FC = () => {
   const handleSelectSlot = (slotInfo: SlotInfo) => {
     setSelectedDate(slotInfo.start);
 
-    const calendarBounds = calendarRef.current?.getBoundingClientRect();
-    const top = slotInfo.box?.y ?? 0;
-    const left = slotInfo.box?.x ?? 0;
+    const cell = document.querySelector(
+      `[data-date="${slotInfo.start.toISOString()}"]`,
+    ) as HTMLElement | null;
+
+    let top = 0;
+    let left = 0;
+
+    if (cell) {
+      const cellRect = cell.getBoundingClientRect();
+      const calendarBounds = calendarRef.current?.getBoundingClientRect();
+
+      const offsetY = cellRect.height / 5;
+
+      const modalWidth = 202;
+
+      const offsetX = (modalWidth - cellRect.width) / 2;
+
+      top = cellRect.bottom - (calendarBounds?.top || 0) - offsetY;
+      left = cellRect.left - (calendarBounds?.left || 0) - offsetX;
+    }
 
     setModalPosition({
-      top: top - (calendarBounds?.top || 0) - 40,
-      left: left - (calendarBounds?.left || 0) - 112,
+      top,
+      left,
     });
 
     setFormData({

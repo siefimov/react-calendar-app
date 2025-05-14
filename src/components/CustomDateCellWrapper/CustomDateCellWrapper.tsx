@@ -2,7 +2,6 @@ import { useCalendarCellContext } from '../../context/CalendarCellContext';
 
 export const CustomDateCellWrapper = ({ value, children }: any) => {
   const { selectedDate } = useCalendarCellContext();
-  console.log(selectedDate);
 
   const isSelected =
     selectedDate &&
@@ -11,6 +10,7 @@ export const CustomDateCellWrapper = ({ value, children }: any) => {
 
   return (
     <div
+      data-date={value?.toISOString()}
       style={{
         boxShadow: isSelected ? '0px 3px 6px #00000029' : undefined,
         border: isSelected ? '1px solid #EAF0F4' : undefined,
