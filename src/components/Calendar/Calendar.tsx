@@ -14,6 +14,7 @@ import withDragAndDrop, {
   type EventInteractionArgs,
 } from 'react-big-calendar/lib/addons/dragAndDrop';
 import { getCalendarConfig } from '../../utils/getCalendarConfig';
+import { CalendarCellProvider } from '../../context/CalendarCellContext';
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop<CalendarEvent>(BigCalendar);
@@ -30,17 +31,39 @@ export const Calendar: FC = () => {
   });
   const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   const calendarRef = useRef<HTMLDivElement>(null);
 
   const handleSelectSlot = (slotInfo: SlotInfo) => {
-    const calendarBounds = calendarRef.current?.getBoundingClientRect();
-    const top = slotInfo.box?.y ?? 0;
-    const left = slotInfo.box?.x ?? 0;
+    setSelectedDate(slotInfo.start);
+    setSelectedEventId(null);
+
+    const cell = document.querySelector(
+      `[data-date="${slotInfo.start.toISOString()}"]`,
+    ) as HTMLElement | null;
+
+    let top = 0;
+    let left = 0;
+
+    if (cell) {
+      const cellRect = cell.getBoundingClientRect();
+      const calendarBounds = calendarRef.current?.getBoundingClientRect();
+
+      const offsetY = cellRect.height / 5;
+
+      const modalWidth = 202;
+
+      const offsetX = (modalWidth - cellRect.width) / 2;
+
+      top = cellRect.bottom - (calendarBounds?.top || 0) - offsetY;
+      left = cellRect.left - (calendarBounds?.left || 0) - offsetX;
+    }
 
     setModalPosition({
-      top: top - (calendarBounds?.top || 0) - 40,
-      left: left - (calendarBounds?.left || 0) - 112,
+      top,
+      left,
     });
 
     setFormData({
@@ -80,6 +103,7 @@ export const Calendar: FC = () => {
     }
     setShowModal(false);
     setEditingEvent(null);
+    setSelectedDate(null);
   };
 
   const handleSelectEvent = (
@@ -87,6 +111,7 @@ export const Calendar: FC = () => {
     _e: React.SyntheticEvent<HTMLElement, Event>,
   ) => {
     const calendarEvent = event as CalendarEvent;
+    setSelectedEventId(calendarEvent.id);
     setEditingEvent(calendarEvent);
     setFormData({
       title: calendarEvent.title,
@@ -95,6 +120,24 @@ export const Calendar: FC = () => {
       notes: calendarEvent.notes || '',
     });
     setIsEditing(false);
+
+    const eventElement = document.querySelector(
+      `[data-event-id="${calendarEvent.id}"]`,
+    ) as HTMLElement | null;
+
+    let top = 0;
+    let left = 0;
+
+    if (eventElement) {
+      const eventRect = eventElement.getBoundingClientRect();
+      const calendarBounds = calendarRef.current?.getBoundingClientRect();
+
+      top = eventRect.bottom - (calendarBounds?.top || 0) + 15;
+      left = eventRect.left - (calendarBounds?.left || 0) - 50;
+    }
+
+    setModalPosition({ top, left });
+
     setShowModal(true);
   };
 
@@ -134,47 +177,55 @@ export const Calendar: FC = () => {
     );
   };
 
-  const { components, formats } = useMemo(getCalendarConfig, []);
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setEditingEvent(null);
+    setSelectedDate(null);
+  };
+
+  const { components, formats } = useMemo(getCalendarConfig, [selectedDate]);
 
   return (
-    <div
-      ref={calendarRef}
-      style={{
-        position: 'relative',
-        height: '100vh',
-        padding: '20px',
-      }}
-    >
-      <DragAndDropCalendar
-        defaultView={Views.MONTH}
-        localizer={localizer}
-        events={events}
-        formats={formats}
-        components={components}
-        step={60}
-        min={moment('1970-01-01T00:00:00').toDate()}
-        max={moment('1970-01-01T23:00:00').toDate()}
-        selectable
-        onSelectSlot={handleSelectSlot}
-        onSelectEvent={handleSelectEvent}
-        onEventDrop={handleEventDrop}
-        onEventResize={handleEventResize}
-        resizable
-      />
-      {showModal && (
-        <AddEventModal
-          top={modalPosition.top}
-          left={modalPosition.left}
-          onClose={() => setShowModal(false)}
-          onSave={handleSave}
-          formData={formData}
-          setFormData={setFormData}
-          isEditing={isEditing}
-          setIsEditing={setIsEditing}
-          editingEvent={editingEvent}
-          onDelete={handleDeleteEvent}
+    <CalendarCellProvider value={{ selectedDate, selectedEventId }}>
+      <div
+        ref={calendarRef}
+        style={{
+          position: 'relative',
+          height: '100vh',
+          padding: '20px',
+        }}
+      >
+        <DragAndDropCalendar
+          defaultView={Views.MONTH}
+          localizer={localizer}
+          events={events}
+          formats={formats}
+          components={components}
+          step={60}
+          min={moment('1970-01-01T00:00:00').toDate()}
+          max={moment('1970-01-01T23:00:00').toDate()}
+          selectable
+          onSelectSlot={handleSelectSlot}
+          onSelectEvent={handleSelectEvent}
+          onEventDrop={handleEventDrop}
+          onEventResize={handleEventResize}
+          resizable
         />
-      )}
-    </div>
+        {showModal && (
+          <AddEventModal
+            top={modalPosition.top}
+            left={modalPosition.left}
+            onClose={handleCloseModal}
+            onSave={handleSave}
+            formData={formData}
+            setFormData={setFormData}
+            isEditing={isEditing}
+            setIsEditing={setIsEditing}
+            editingEvent={editingEvent}
+            onDelete={handleDeleteEvent}
+          />
+        )}
+      </div>
+    </CalendarCellProvider>
   );
 };

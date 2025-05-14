@@ -6,8 +6,6 @@ interface CustomHeaderProps {
 }
 
 export const CustomDayHeader: FC<CustomHeaderProps> = ({ date }) => {
-  console.log('custom day header render');
-
   return (
     <div
       className="custom-day-header"
