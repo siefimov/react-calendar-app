@@ -1,0 +1,11 @@
+@use '../../styles/variables' as *;
+
+.custom-week-header {
+  display: flex;
+  font-size: $font-size-small;
+  font-weight: $font-weight-bold;
+  color: $color-text-light;
+  line-height: 14px;
+}
+
+

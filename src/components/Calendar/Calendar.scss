@@ -1,0 +1,162 @@
+@use '../../styles/variables' as *;
+
+.rbc-calendar {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  color: $color-text-medium;
+
+  & .rbc-time-view {
+    border: 1px solid $color-background-tertiary;
+  }
+}
+
+.rbc-month-view {
+  & .rbc-month-row + .rbc-month-row {
+    border-top: 1px solid $color-background-quaternary;
+  }
+}
+
+.rbc-month-row {
+  & .rbc-event {
+    background-color: $color-primary;
+    border-radius: 4px;
+    padding: 7px 0 6px 4px;
+  }
+}
+
+.rbc-day-bg.rbc-today {
+  background-color: $color-background-quaternary;
+}
+
+.rbc-header {
+  background-color: $color-background-quaternary;
+  border: 1px solid $color-background-tertiary;
+  border-bottom: none;
+  color: $color-text-light;
+  font-size: $font-size-small;
+  font-weight: bold;
+  line-height: 45px;
+  text-transform: uppercase;
+
+  .rbc-row & {
+    border: 1px solid $color-background-quaternary;
+    border-bottom: 1px solid $color-background-tertiary;
+  }
+}
+
+.rbc-time-view .rbc-time-content > * + * > * {
+  border-left: 1px solid $color-background-tertiary;
+}
+
+.rbc-time-view .rbc-time-content {
+  border-top: 1px solid $color-background-tertiary;
+}
+
+.rbc-day-slot .rbc-event,
+.rbc-day-slot .rbc-background-event {
+  background-color: $color-primary;
+  border: 1px solid $color-primary;
+  border-radius: 4px;
+  padding: 7px 0 6px 14px;
+}
+
+.rbc-day-slot {
+  & .rbc-events-container .rbc-event,
+  .rbc-events-container .rbc-background-event {
+    border: 1px solid $color-primary;
+  }
+
+  & .rbc-timeslot-group {
+    border-bottom: 1px solid $color-background-tertiary;
+  }
+}
+
+.rbc-day-slot.rbc-time-column .rbc-time-slot {
+  border-top: none;
+}
+.rbc-time-slot:first-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rbc-time-slot:last-child {
+  display: none;
+}
+
+.rbc-day-bg.rbc-off-range-bg {
+  background-color: $color-white;
+  color: rgba($color: $color-text-dark, $alpha: 0.3);
+}
+
+.rbc-header + .rbc-header {
+  background-color: $color-background-quaternary;
+}
+
+.rbc-now.rbc-today {
+  background-color: $color-background-quaternary;
+}
+
+.rbc-event .rbc-event-label {
+  display: none;
+}
+
+.rbc-row .rbc-header + .rbc-header,
+.rbc-row-bg .rbc-day-bg + .rbc-day-bg {
+  border-left: 1px solid $color-background-quaternary;
+}
+
+.rbc-row .rbc-date-cell {
+  padding: 17px 15px 3px;
+}
+
+.rbc-time-header-content {
+  & .rbc-row {
+    flex-grow: 1;
+    height: 100%;
+  }
+
+  .rbc-time-header & {
+    border-left: 1px solid $color-background-tertiary;
+  }
+}
+
+.rbc-time-gutter.rbc-time-column .rbc-timeslot-group {
+  border-bottom: 1px solid $color-background-tertiary;
+}
+
+.rbc-row-content .rbc-row {
+  color: black;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  z-index: 1001;
+}
+
+.modal input {
+  width: 100%;
+  margin: 8px 0;
+  padding: 8px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

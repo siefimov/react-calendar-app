@@ -1,0 +1,124 @@
+@use '../../styles/variables' as *;
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+
+  &__logo {
+    padding: 20px;
+    background-color: #3c3b53;
+    color: $color-white;
+    font-size: $font-size-medium;
+    font-weight: $font-weight-bold;
+    letter-spacing: 3px;
+    line-height: 21px;
+    min-height: 70px;
+  }
+
+  &__logo-mobile {
+    display: none;
+    font-size: 30px;
+    color: $color-white;
+    height: 70px;
+    background-color: #3c3b53;
+    padding: 15px 15px 20px;
+  }
+
+  &__nav {
+    background-color: $color-text-dark;
+    height: 100%;
+    text-align: center;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    height: 53px;
+
+    background-color: $color-text-dark;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: #3c3b53;
+      transition: background-color 0.2s ease-in-out;
+      cursor: pointer;
+    }
+
+    &:hover .sidebar__link,
+    .sidebar__link.active {
+      background-color: #3c3b53;
+
+      position: relative;
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 4px;
+        height: 100%;
+        background: #a3a0fb;
+        z-index: 2;
+      }
+
+      .sidebar__icon svg path {
+        fill: #a3a0fb !important;
+        transition: fill 0.2s;
+      }
+
+      .sidebar__icon {
+        color: #a3a0fb;
+        transition: color 0.2s;
+      }
+    }
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    color: $color-white;
+    line-height: 53px;
+    width: 100%;
+    padding-left: 25px;
+
+    &.active {
+      background-color: #3c3b53;
+    }
+  }
+
+  &__icon {
+    margin-right: 11px;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__label {
+    display: flex;
+    justify-content: center;
+    font-size: $font-size-medium;
+  }
+}
+
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 60px;
+  }
+}
+
+@media (max-width: 992px) {
+  .sidebar {
+    width: 60px;
+
+    &__logo {
+      display: none;
+    }
+
+    &__logo-mobile {
+      display: block;
+    }
+  }
+}

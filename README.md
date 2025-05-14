@@ -1,54 +1,112 @@
-# React + TypeScript + Vite
+# React Calendar App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Description
 
-Currently, two official plugins are available:
+This project is a Calendar application built with React and TypeScript. The application allows users to view, create, edit, and delete calendar events with a modern and responsive UI. The project demonstrates advanced usage of `react-big-calendar`, custom event rendering, and interactive modals for event management.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## Demo
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+**Live Preview:**  
+_Coming soon_
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+**GitHub repository:**  
+[Link](https://github.com/siefimov/react-calendar-app)
+
+---
+
+## Technologies Used
+
+- React
+- TypeScript
+- SCSS, BEM
+- Vite
+- ESLint
+- Stylelint
+- Prettier
+- pnpm
+
+---
+
+## Getting Started
+
+> **Note:**  
+> This project uses [pnpm](https://pnpm.io/) as the package manager.  
+> Please install pnpm globally and use it for all dependency management and scripts.
+
+### 1. Check Node.js
+
+Ensure you have Node.js (required version 20.x) installed on your machine.
+
+**(a) Check Node.js version:**  
+Open your terminal and run:
+
+```bash
+node --version
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Ensure the version is 20.x. If not, download and install the required version from the official Node.js website or by using nvm (Node Version Manager):
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+nvm install 20
 ```
+
+**(b) Switch Node.js version:**  
+If you need to switch to the required Node.js version, use nvm:
+
+```bash
+nvm use 20
+```
+
+If you don't have nvm installed, follow the instructions on the [nvm repository](https://github.com/nvm-sh/nvm).
+
+---
+
+### 2. Install pnpm
+
+This project uses pnpm as the package manager.  
+If you don't have pnpm installed globally, install it with:
+
+```bash
+npm install -g pnpm
+```
+
+---
+
+### 3. Clone the repo
+
+```bash
+git clone https://github.com/siefimov/react-calendar-app.git
+cd react-calendar-app
+```
+
+---
+
+### 4. Install dependencies
+
+```bash
+pnpm install
+```
+
+---
+
+### 5. Run the project locally
+
+```bash
+pnpm start
+```
+
+---
+
+## ✨ Features
+
+- View a monthly calendar with events
+- Create new events by clicking on a day cell
+- Edit and delete existing events
+- Modal forms for event creation and editing
+- Drag and drop events to reschedule
+- Responsive design for desktop, tablet, and mobile
+- Clean and modern UI
+- Modular and reusable components
+- User-friendly interface
