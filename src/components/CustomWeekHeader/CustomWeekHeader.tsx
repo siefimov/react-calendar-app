@@ -7,10 +7,7 @@ interface CustomHeaderProps {
   label: string;
 }
 
-export const CustomWeekHeader: React.FC<CustomHeaderProps> = ({
-  date,
-  label,
-}) => {
+export const CustomWeekHeader: React.FC<CustomHeaderProps> = ({ date }) => {
   return (
     <div className="custom-week-header">
       <span className="custom-week-header__day">

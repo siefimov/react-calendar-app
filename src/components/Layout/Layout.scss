@@ -36,6 +36,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  margin-bottom: 100px;
 
   & > * {
     width: 100%;
@@ -46,8 +47,6 @@
     flex: 1 1 auto;
     background: #fff;
   }
-
-  margin-bottom: 100px;
 }
 
 .layout__title {
@@ -83,7 +82,6 @@
 
   .sidebar__label {
     display: none;
-    // visibility: hidden;
   }
 
   .sidebar__item:hover .sidebar__link,

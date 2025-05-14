@@ -5,6 +5,7 @@ import {
   CustomDayHeader,
   CustomTimeGutterHeader,
 } from '../components';
+import { CustomDateCellWrapper } from '../components/CustomDateCellWrapper/CustomDateCellWrapper';
 
 export function getCalendarConfig() {
   return {
@@ -17,6 +18,7 @@ export function getCalendarConfig() {
       day: {
         header: CustomDayHeader,
       },
+      dateCellWrapper: CustomDateCellWrapper,
     },
     formats: {
       dayHeaderFormat: (

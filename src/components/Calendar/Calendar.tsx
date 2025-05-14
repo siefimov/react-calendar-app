@@ -14,6 +14,7 @@ import withDragAndDrop, {
   type EventInteractionArgs,
 } from 'react-big-calendar/lib/addons/dragAndDrop';
 import { getCalendarConfig } from '../../utils/getCalendarConfig';
+import { CalendarCellProvider } from '../../context/CalendarCellContext';
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop<CalendarEvent>(BigCalendar);
@@ -30,10 +31,13 @@ export const Calendar: FC = () => {
   });
   const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const calendarRef = useRef<HTMLDivElement>(null);
 
   const handleSelectSlot = (slotInfo: SlotInfo) => {
+    setSelectedDate(slotInfo.start);
+
     const calendarBounds = calendarRef.current?.getBoundingClientRect();
     const top = slotInfo.box?.y ?? 0;
     const left = slotInfo.box?.x ?? 0;
@@ -80,6 +84,7 @@ export const Calendar: FC = () => {
     }
     setShowModal(false);
     setEditingEvent(null);
+    setSelectedDate(null);
   };
 
   const handleSelectEvent = (
@@ -134,47 +139,55 @@ export const Calendar: FC = () => {
     );
   };
 
-  const { components, formats } = useMemo(getCalendarConfig, []);
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setEditingEvent(null);
+    setSelectedDate(null);
+  };
+
+  const { components, formats } = useMemo(getCalendarConfig, [selectedDate]);
 
   return (
-    <div
-      ref={calendarRef}
-      style={{
-        position: 'relative',
-        height: '100vh',
-        padding: '20px',
-      }}
-    >
-      <DragAndDropCalendar
-        defaultView={Views.MONTH}
-        localizer={localizer}
-        events={events}
-        formats={formats}
-        components={components}
-        step={60}
-        min={moment('1970-01-01T00:00:00').toDate()}
-        max={moment('1970-01-01T23:00:00').toDate()}
-        selectable
-        onSelectSlot={handleSelectSlot}
-        onSelectEvent={handleSelectEvent}
-        onEventDrop={handleEventDrop}
-        onEventResize={handleEventResize}
-        resizable
-      />
-      {showModal && (
-        <AddEventModal
-          top={modalPosition.top}
-          left={modalPosition.left}
-          onClose={() => setShowModal(false)}
-          onSave={handleSave}
-          formData={formData}
-          setFormData={setFormData}
-          isEditing={isEditing}
-          setIsEditing={setIsEditing}
-          editingEvent={editingEvent}
-          onDelete={handleDeleteEvent}
+    <CalendarCellProvider value={{ selectedDate }}>
+      <div
+        ref={calendarRef}
+        style={{
+          position: 'relative',
+          height: '100vh',
+          padding: '20px',
+        }}
+      >
+        <DragAndDropCalendar
+          defaultView={Views.MONTH}
+          localizer={localizer}
+          events={events}
+          formats={formats}
+          components={components}
+          step={60}
+          min={moment('1970-01-01T00:00:00').toDate()}
+          max={moment('1970-01-01T23:00:00').toDate()}
+          selectable
+          onSelectSlot={handleSelectSlot}
+          onSelectEvent={handleSelectEvent}
+          onEventDrop={handleEventDrop}
+          onEventResize={handleEventResize}
+          resizable
         />
-      )}
-    </div>
+        {showModal && (
+          <AddEventModal
+            top={modalPosition.top}
+            left={modalPosition.left}
+            onClose={handleCloseModal}
+            onSave={handleSave}
+            formData={formData}
+            setFormData={setFormData}
+            isEditing={isEditing}
+            setIsEditing={setIsEditing}
+            editingEvent={editingEvent}
+            onDelete={handleDeleteEvent}
+          />
+        )}
+      </div>
+    </CalendarCellProvider>
   );
 };
