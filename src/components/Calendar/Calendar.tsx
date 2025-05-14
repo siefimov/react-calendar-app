@@ -32,11 +32,13 @@ export const Calendar: FC = () => {
   const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   const calendarRef = useRef<HTMLDivElement>(null);
 
   const handleSelectSlot = (slotInfo: SlotInfo) => {
     setSelectedDate(slotInfo.start);
+    setSelectedEventId(null);
 
     const cell = document.querySelector(
       `[data-date="${slotInfo.start.toISOString()}"]`,
@@ -109,6 +111,7 @@ export const Calendar: FC = () => {
     _e: React.SyntheticEvent<HTMLElement, Event>,
   ) => {
     const calendarEvent = event as CalendarEvent;
+    setSelectedEventId(calendarEvent.id);
     setEditingEvent(calendarEvent);
     setFormData({
       title: calendarEvent.title,
@@ -117,6 +120,24 @@ export const Calendar: FC = () => {
       notes: calendarEvent.notes || '',
     });
     setIsEditing(false);
+
+    const eventElement = document.querySelector(
+      `[data-event-id="${calendarEvent.id}"]`,
+    ) as HTMLElement | null;
+
+    let top = 0;
+    let left = 0;
+
+    if (eventElement) {
+      const eventRect = eventElement.getBoundingClientRect();
+      const calendarBounds = calendarRef.current?.getBoundingClientRect();
+
+      top = eventRect.bottom - (calendarBounds?.top || 0) + 15;
+      left = eventRect.left - (calendarBounds?.left || 0) - 50;
+    }
+
+    setModalPosition({ top, left });
+
     setShowModal(true);
   };
 
@@ -165,7 +186,7 @@ export const Calendar: FC = () => {
   const { components, formats } = useMemo(getCalendarConfig, [selectedDate]);
 
   return (
-    <CalendarCellProvider value={{ selectedDate }}>
+    <CalendarCellProvider value={{ selectedDate, selectedEventId }}>
       <div
         ref={calendarRef}
         style={{

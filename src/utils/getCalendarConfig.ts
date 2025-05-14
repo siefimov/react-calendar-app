@@ -4,8 +4,9 @@ import {
   CustomWeekHeader,
   CustomDayHeader,
   CustomTimeGutterHeader,
+  CustomEvent,
+  CustomDateCellWrapper,
 } from '../components';
-import { CustomDateCellWrapper } from '../components/CustomDateCellWrapper/CustomDateCellWrapper';
 
 export function getCalendarConfig() {
   return {
@@ -19,6 +20,7 @@ export function getCalendarConfig() {
         header: CustomDayHeader,
       },
       dateCellWrapper: CustomDateCellWrapper,
+      event: CustomEvent,
     },
     formats: {
       dayHeaderFormat: (

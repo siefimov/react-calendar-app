@@ -1,5 +1,7 @@
 import DatePicker from 'react-datepicker';
+import { FaRegCalendarAlt, FaRegClock } from 'react-icons/fa';
 import { formatDate, formatTime } from '../../../utils/date';
+import '../AddEventModal.scss';
 
 export const EventFormFields = ({
   formData,
@@ -13,7 +15,7 @@ export const EventFormFields = ({
 }: any) => (
   <>
     <label>
-      Event Name
+      event name
       <input
         type="text"
         name="title"
@@ -26,7 +28,12 @@ export const EventFormFields = ({
       )}
     </label>
     <label>
-      Event Date
+      <div className="event-modal__block">
+        <span className="event-modal__title">event date</span>
+        <span className="event-modal__icon">
+          <FaRegCalendarAlt />
+        </span>
+      </div>
       <DatePicker
         selected={selectedDate}
         onChange={date => {
@@ -42,7 +49,12 @@ export const EventFormFields = ({
       {errors.date && <span className="event-modal__error">{errors.date}</span>}
     </label>
     <label>
-      Event Time
+      <div className="event-modal__block">
+        <span>event time</span>
+        <span className="event-modal__icon">
+          <FaRegClock />
+        </span>
+      </div>
       <DatePicker
         selected={selectedTime}
         onChange={date => {

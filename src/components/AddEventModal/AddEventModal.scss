@@ -56,7 +56,7 @@
   textarea {
     border: none;
     border-bottom: 1px solid #bdbdbd;
-    font-size: 1rem;
+    font-size: $font-size-small; 
     color: #424242;
     max-width: 148px;
     max-height: 28px;
@@ -115,6 +115,29 @@ textarea {
 .event-modal__datepicker {
   width: 100%;
   box-sizing: border-box;
+  font-size: 11px;
+}
+
+.event-modal__block {
+  position: relative;
+}
+
+.event-modal__icon {
+  position: absolute;
+  top: 15px;
+  right: 0;
+  z-index: 10;
+
+  & svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.event-modal__title {
+  position: relative;
+  top: 5px;
+  z-index: 10;
 }
 
 input[type='date']:empty,
