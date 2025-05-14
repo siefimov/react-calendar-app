@@ -1,8 +1,8 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Calendar, Layout } from './components/';
-import './App.scss';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Calendar, Layout } from "./components/";
+import "./App.scss";
 
-function App() {
+export const App = () => {
   return (
     <BrowserRouter>
       <Routes>

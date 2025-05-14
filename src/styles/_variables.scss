@@ -1,4 +1,6 @@
-$font-family-base: 'Source Sans Pro', sans-serif;
+@use "../assets/styles/fonts" as *;
+
+$font-family-base: "Source Sans Pro", sans-serif;
 
 $font-size-h1: 28px;
 $font-size-large: 18px;
