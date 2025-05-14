@@ -1,0 +1,11 @@
+export { HelpIcon } from './HelpIcon';
+export { InvoiceIcon } from './InvoiceIcon';
+export { CalendarIcon } from './CalendarIcon';
+export { HomeIcon } from './HomeIcon';
+export { EnvelopeIcon } from './EnvelopeIcon';
+export { SettingsIcon } from './SettingsIcon';
+export { SearchIcon } from './SearchIcon';
+export { SupportIcon } from './SupportIcon';
+export { BellIcon } from './BellIcon';
+export { ChatIcon } from './ChatIcon';
+export { ArrowDownIcon } from './ArrowDownIcon';
