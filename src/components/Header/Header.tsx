@@ -1,14 +1,14 @@
-import { type FC } from 'react';
+import { type FC } from "react";
 import {
   SearchIcon,
   SupportIcon,
   BellIcon,
   ChatIcon,
   ArrowDownIcon,
-} from '../Icons';
+} from "../Icons";
 
-import './Header.scss';
-import { Link } from 'react-router-dom';
+import "./Header.scss";
+import { Link } from "react-router-dom";
 
 export const Header: FC = () => (
   <header className="header">
@@ -45,7 +45,7 @@ export const Header: FC = () => (
         </div>
         <img
           className="header__avatar"
-          src="/images/avatar.png"
+          src="/react-calendar-app/images/avatar.png"
           alt="User avatar"
         />
       </div>
